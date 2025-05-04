@@ -3,22 +3,30 @@ const router = express.Router();
 const applicationController = require('../controllers/applicationController');
 const { ensureAuthenticated } = require('../middleware/auth');
 
-// Show all applications for logged-in user
+// Define the statuses array globally
+const statuses = ['Applied', 'Interviewing', 'Offer', 'Rejected', 'Accepted'];
+
+// View all applications
 router.get('/', ensureAuthenticated, applicationController.getAllApplications);
 
-// Show form to add a new application
-router.get('/new', ensureAuthenticated, applicationController.renderNewForm);
-
-// Handle new application form submission
+// Create new application
+router.get('/new', ensureAuthenticated, (req, res) => {
+  res.render('applications/new', { statuses });
+});
 router.post('/', ensureAuthenticated, applicationController.createApplication);
 
-// Show form to edit application
-router.get('/:id/edit', ensureAuthenticated, applicationController.renderEditForm);
+// Edit/update application
+router.get('/:id/edit', ensureAuthenticated, async (req, res) => {
+  const application = await applicationController.findApplicationById(req.params.id, req.user._id);
+  if (!application) {
+    req.flash('error_msg', 'Application not found.');
+    return res.redirect('/applications');
+  }
+  res.render('applications/edit', { application, statuses });
+});
+router.patch('/:id', ensureAuthenticated, applicationController.updateApplication);
 
-// Handle edit form submission
-router.post('/:id/update', ensureAuthenticated, applicationController.updateApplication);
-
-// Delete an application
-router.post('/:id/delete', ensureAuthenticated, applicationController.deleteApplication);
+// Delete application
+router.delete('/:id', ensureAuthenticated, applicationController.deleteApplication);
 
 module.exports = router;

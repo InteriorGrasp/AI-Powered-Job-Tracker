@@ -3,18 +3,23 @@ const mongoose = require('mongoose');
 const jobApplicationSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // assuming you have user authentication
-    required: true
+    ref: 'User',
+    required: [true, 'User reference is required.']
   },
   jobTitle: {
     type: String,
-    required: true
+    required: [true, 'Job title is required.'],
+    trim: true
   },
   company: {
     type: String,
-    required: true
+    required: [true, 'Company name is required.'],
+    trim: true
   },
-  location: String,
+  location: {
+    type: String,
+    trim: true
+  },
   applicationDate: {
     type: Date,
     default: Date.now
@@ -24,10 +29,20 @@ const jobApplicationSchema = new mongoose.Schema({
     enum: ['Applied', 'Interviewing', 'Offer', 'Rejected', 'Accepted'],
     default: 'Applied'
   },
-  jobLink: String,
-  resumeVersion: String
+  jobLink: {
+    type: String,
+    trim: true
+  },
+  resumeVersion: {
+    type: String,
+    trim: true
+  },
+  notes: {
+    type: String,
+    trim: true
+  }
 }, {
   timestamps: true
 });
 
-module.exports = mongoose.model('jobApplication', jobApplicationSchema);
+module.exports = mongoose.model('JobApplication', jobApplicationSchema);

@@ -8,36 +8,36 @@
   <link rel="stylesheet" href="/stylesheets/application.css">
 </head>
 <body>
-  <h1 class="application-header">Edit Job Application</h1>
-  <form action="/applications/{{application._id}}/update" method="POST" class="application-form">
-    <div class="form-group">
-      <label>Job Title</label>
-      <input type="text" name="jobTitle" class="form-control" value="{{application.jobTitle}}" required>
-    </div>
-    <div class="form-group">
-      <label>Company</label>
-      <input type="text" name="company" class="form-control" value="{{application.company}}" required>
-    </div>
-    <div class="form-group">
-      <label>Location</label>
-      <input type="text" name="location" class="form-control" value="{{application.location}}">
-    </div>
-    <div class="form-group">
-      <label>Job Link</label>
-      <input type="url" name="jobLink" class="form-control" value="{{application.jobLink}}">
-    </div>
-    <div class="form-group">
-      <label>Status</label>
-      <select name="status" class="form-control">
-        <option value="Applied" {{#ifCond application.status 'Applied'}}selected{{/ifCond}}>Applied</option>
-        <option value="Interviewing" {{#ifCond application.status 'Interviewing'}}selected{{/ifCond}}>Interviewing</option>
-        <option value="Offer" {{#ifCond application.status 'Offer'}}selected{{/ifCond}}>Offer</option>
-        <option value="Rejected" {{#ifCond application.status 'Rejected'}}selected{{/ifCond}}>Rejected</option>
-        <option value="Accepted" {{#ifCond application.status 'Accepted'}}selected{{/ifCond}}>Accepted</option>
-      </select>
-    </div>
-    <button type="submit" class="btn btn-primary application-btn">Update</button>
-    <a href="/applications" class="btn btn-secondary ml-2">Cancel</a>
-  </form>
+  <div class="container mt-5">
+    <h1 class="mb-4">Edit Job Application</h1>
+    <form action="/applications/{{application._id}}?_method=PATCH" method="POST">
+      <div class="mb-3">
+        <label class="form-label">Job Title</label>
+        <input type="text" name="jobTitle" class="form-control" value="{{application.jobTitle}}" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Company</label>
+        <input type="text" name="company" class="form-control" value="{{application.company}}" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Location</label>
+        <input type="text" name="location" class="form-control" value="{{application.location}}">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Job Link</label>
+        <input type="url" name="jobLink" class="form-control" value="{{application.jobLink}}">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select">
+          {{#each statuses}}
+            <option value="{{this}}" {{#ifCond ../application.status this}}selected{{/ifCond}}>{{this}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Update</button>
+      <a href="/applications" class="btn btn-secondary">Cancel</a>
+    </form>
+  </div>
 </body>
 </html>

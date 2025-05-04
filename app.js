@@ -11,6 +11,7 @@ require('./configs/passport');
 require('dotenv').config();
 var mongoose = require("mongoose");
 const moment = require('moment');
+const methodOverride = require('method-override');
 
 // Route Files
 var indexRouter = require('./routes/index');
@@ -50,6 +51,7 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'));
 
 // API routes
 app.use('/api', jobRoutes);
